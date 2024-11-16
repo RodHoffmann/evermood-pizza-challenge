@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :multiplier_price do
+  factory :size_multiplier do
     size { "MyString" }
     multiplier { "9.99" }
   end

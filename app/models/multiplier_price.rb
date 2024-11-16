@@ -1,2 +1,0 @@
-class MultiplierPrice < ApplicationRecord
-end

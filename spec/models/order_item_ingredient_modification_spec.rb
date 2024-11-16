@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe OrderItemIngredient, type: :model do
+RSpec.describe OrderItemIngredientModification, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end
