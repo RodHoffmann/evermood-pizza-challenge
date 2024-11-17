@@ -7,7 +7,7 @@
     <p>Promotion Codes: <%= display_promotion_codes(order) %></p>
     <p>Discount Codes: <%= display_discount_code(order) %></p>
     <br>
-    <p>Total price: €</p>
+    <p>Total price: <%=  '%.2f' % order.total_price %>€</p>
     <%= form_with(model: order, method: :patch, local: false) do |f| %>
       <%= f.hidden_field :state, value: 'completed' %>
       <%= f.submit "Complete" %>
