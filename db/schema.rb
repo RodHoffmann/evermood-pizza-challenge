@@ -42,8 +42,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_081430) do
   create_table "order_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "pizza_id", null: false
     t.uuid "size_multiplier_id", null: false
+    t.uuid "order_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["pizza_id"], name: "index_order_items_on_pizza_id"
     t.index ["size_multiplier_id"], name: "index_order_items_on_size_multiplier_id"
   end
@@ -59,21 +61,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_081430) do
 
   create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "state"
-    t.uuid "discount_code_id", null: false
-    t.uuid "order_item_id", null: false
+    t.uuid "discount_code_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["discount_code_id"], name: "index_orders_on_discount_code_id"
-    t.index ["order_item_id"], name: "index_orders_on_order_item_id"
-  end
-
-  create_table "pizza_ingredients", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "pizza_id", null: false
-    t.uuid "ingredient_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ingredient_id"], name: "index_pizza_ingredients_on_ingredient_id"
-    t.index ["pizza_id"], name: "index_pizza_ingredients_on_pizza_id"
   end
 
   create_table "pizzas", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -102,12 +93,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_081430) do
 
   add_foreign_key "order_item_ingredient_modifications", "ingredients"
   add_foreign_key "order_item_ingredient_modifications", "order_items"
+  add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "pizzas"
   add_foreign_key "order_items", "size_multipliers"
   add_foreign_key "order_promotion_codes", "orders"
   add_foreign_key "order_promotion_codes", "promotion_codes"
   add_foreign_key "orders", "discount_codes"
-  add_foreign_key "orders", "order_items"
-  add_foreign_key "pizza_ingredients", "ingredients"
-  add_foreign_key "pizza_ingredients", "pizzas"
 end

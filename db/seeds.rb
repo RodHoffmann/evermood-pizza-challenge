@@ -10,7 +10,6 @@
 
 # Uncomment following lines to delete all data first
 puts 'Destroying all data...'
-PizzaIngredient.destroy_all
 OrderPromotionCode.destroy_all
 PromotionCode.destroy_all
 DiscountCode.destroy_all
@@ -22,13 +21,13 @@ Ingredient.destroy_all
 Pizza.destroy_all
 puts 'All data destroyed successfully'
 
-puts 'Parsing config.yml file...'
-initial_data = YAML.load_file('db/initial_data/config.yml')
-sizes_and_multipliers = initial_data['size_multipliers']
-pizzas_names_and_prices = initial_data['pizzas']
-pizza_ingredients_names_and_prices = initial_data['ingredients']
-promotions_name_and_specs = initial_data['promotions']
-discounts_name_and_percentage = initial_data['discounts']
+puts 'Parsing and storing config.yml file...'
+initial_data = YAML.load_file('db/initial_data/config.yml', symbolize_names: true)
+sizes_and_multipliers = initial_data[:size_multipliers]
+pizzas_names_and_prices = initial_data[:pizzas]
+pizza_ingredients_names_and_prices = initial_data[:ingredients]
+promotions_name_and_specs = initial_data[:promotions]
+discounts_name_and_percentage = initial_data[:discounts]
 puts 'Parsing success!'
 puts 'Creating ingredients...'
 pizza_ingredients_names_and_prices.each { |name, price| Ingredient.create!(name: name, price: price.to_f.round(2)) }
@@ -42,15 +41,36 @@ puts 'Sizes Multipliers created successfully'
 puts 'Creating Promotions...'
 promotions_name_and_specs.each do |name, specs|
   PromotionCode.create!(name: name,
-                        target: specs['target'],
-                        target_size: specs['target_size'],
-                        from: specs['from'].to_i,
-                        to: specs['to'].to_i)
+                        target: specs[:target],
+                        target_size: specs[:target_size],
+                        from: specs[:from].to_i,
+                        to: specs[:to].to_i)
 end
 puts 'Promotions created successfully'
 puts 'Creating Discounts'
 discounts_name_and_percentage.each do |name, specs|
-  DiscountCode.create!(name: name, deduction_in_percent: specs['deduction_in_percent'].to_f.round(2))
+  DiscountCode.create!(name: name, deduction_in_percent: specs[:deduction_in_percent].to_f.round(2))
 end
 puts 'Discounts created successfully'
+
+puts 'Parsing and storing orders.json file...'
+initial_orders = JSON.load_file('db/initial_data/orders.json', symbolize_names: true)
+initial_orders.each do |initial_order|
+  promotion_codes = PromotionCode.where(name: initial_order[:promotionCodes])
+  discount_code = DiscountCode.find_by(name: initial_order[:discountCode])
+  new_order = Order.create!(id: initial_order[:id],
+                            created_at: Time.parse(initial_order[:createdAt]),
+                            updated_at: Time.parse(initial_order[:createdAt]),
+                            state: initial_order[:state],
+                            discount_code: discount_code)
+  initial_order[:items].each do |item|
+    pizza = Pizza.find_by(name: item[:name])
+    size_multiplier = SizeMultiplier.find_by(size: item[:size])
+    order_item = OrderItem.create!(pizza: pizza, size_multiplier: size_multiplier, order: new_order)
+    item[:add]&.each { |add_ingredient| OrderItemIngredientModification.create!(order_item: order_item, ingredient: Ingredient.find_by(name: add_ingredient), modification_type: 'add') }
+    item[:remove]&.each { |remove_ingredient| OrderItemIngredientModification.create!(order_item: order_item, ingredient: Ingredient.find_by(name: remove_ingredient), modification_type: 'remove') }
+  end
+  promotion_codes&.each { |promotion_code| OrderPromotionCode.create!(promotion_code: promotion_code, order: new_order) }
+end
+puts 'Orders created successfully'
 puts "\nAll initial data migrated into the Database\n"
