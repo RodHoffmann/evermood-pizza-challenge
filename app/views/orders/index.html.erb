@@ -1,19 +1,28 @@
 <h1>Orders</h1>
 <hr>
 <% @open_orders.each do |order| %>
-  <p>ID: <%= order.id %></p>
-  <p>Created: <%= order.created_at %></p>
-  <p>Promotion Codes: <%= display_promotion_codes(order) %></p>
-  <p>Discount Codes: <%= display_discount_code(order) %></p>
-  <br>
-  <p>Total price: €</p>
-  <br>
-  <%= form_with(model: order, method: :patch, local: false) do |f| %>
-    <%= f.hidden_field :state, value: 'completed' %>
-    <%= f.submit "Completed" %>
-  <% end %>
-  <% order.order_items.each do |item| %>
-    <p><%= item.pizza.name %></p>
-  <% end %>
+  <span class="inline-section">
+    <p>ID: <%= order.id %></p>
+    <p>Created: <%= order.created_at %></p>
+    <p>Promotion Codes: <%= display_promotion_codes(order) %></p>
+    <p>Discount Codes: <%= display_discount_code(order) %></p>
+    <br>
+    <p>Total price: €</p>
+    <%= form_with(model: order, method: :patch, local: false) do |f| %>
+      <%= f.hidden_field :state, value: 'completed' %>
+      <%= f.submit "Complete" %>
+    <% end %>
+  </span>
+  <span class="inline-section">
+    <p>Items:</p>
+    <ul>
+    <% order.order_items.each do |order_item| %>
+      <li><%=  display_pizza(order_item) %></li>
+      <ul>
+        <%= display_pizza_modifications(order_item) %>
+      </ul>
+    <% end %>
+    </ul>
+  </span>
   <hr>
 <% end %>

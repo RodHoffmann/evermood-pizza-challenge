@@ -11,8 +11,4 @@ class Order < ApplicationRecord
   def self.open_orders
     open_orders = Order.where(state: 'OPEN')
   end
-
-  private
-
-
 end

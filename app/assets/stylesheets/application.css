@@ -13,3 +13,16 @@
  *= require_tree .
  *= require_self
  */
+ .inline-section {
+  display: inline-block;
+  vertical-align: top;
+  padding-left: 4px;
+ }
+
+ .inline-section * {
+  margin: 2px;
+ }
+
+ .inline-section form {
+   margin-top: 12px;
+ }
