@@ -12,10 +12,11 @@
 puts 'Destroying all data...'
 OrderPromotionCode.destroy_all
 PromotionCode.destroy_all
-DiscountCode.destroy_all
-Order.destroy_all
+
 OrderItemIngredientModification.destroy_all
 OrderItem.destroy_all
+Order.destroy_all
+DiscountCode.destroy_all
 SizeMultiplier.destroy_all
 Ingredient.destroy_all
 Pizza.destroy_all
