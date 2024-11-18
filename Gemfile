@@ -50,7 +50,12 @@ group :development, :test do
   gem 'rspec-rails', '~> 7.0.0'
   gem 'factory_bot_rails'
   gem 'capybara'
+end
+
+group :test do
+  gem 'database_cleaner-active_record'
   gem 'faker'
+  gem 'shoulda-matchers'
 end
 
 group :development do
