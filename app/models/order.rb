@@ -7,6 +7,7 @@ class Order < ApplicationRecord
   has_many :order_promotion_codes, dependent: :destroy
   has_many :promotion_codes, through: :order_promotion_codes
   has_many :size_multipliers, through: :order_items
+  validates :state, presence: true, inclusion: { in: %w[OPEN CLOSED] }
 
   def self.open_orders
     Order.where(state: 'OPEN')
