@@ -4,11 +4,17 @@ class OrdersController < ApplicationController
   end
 
   def update
-    order = Order.find(params[:id])
-    if order.update(order_params)
-      redirect_to orders_path, notice: 'Order updated successfully'
+    @order = Order.find(params[:id])
+    if @order.update(order_params)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to orders_path, notice: 'Order updated successfully' }
+      end
     else
-      render :index, notice: "Order couldn't be updated", status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@order, partial: "orders/order", locals: { order: @order }) }
+        format.html { render :index, notice: "Order couldn't be updated", status: :unprocessable_entity }
+      end
     end
   end
 
