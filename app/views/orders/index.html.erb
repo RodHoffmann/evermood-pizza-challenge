@@ -9,7 +9,7 @@
     <br>
     <p>Total price: <%=  '%.2f' % order.total_price %>€</p>
     <%= form_with(model: order, method: :patch, local: false) do |f| %>
-      <%= f.hidden_field :state, value: 'completed' %>
+      <%= f.hidden_field :state, value: 'CLOSED' %>
       <%= f.submit "Complete" %>
     <% end %>
   </span>

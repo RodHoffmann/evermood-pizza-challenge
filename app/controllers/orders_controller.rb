@@ -4,9 +4,12 @@ class OrdersController < ApplicationController
   end
 
   def update
-    @order = Order.find(params[:id])
-    @order.update(order_params)
-    redirect_to orders_path
+    order = Order.find(params[:id])
+    if order.update(order_params)
+      redirect_to orders_path, notice: 'Order updated successfully'
+    else
+      render :index, notice: "Order couldn't be updated", status: :unprocessable_entity
+    end
   end
 
   private
