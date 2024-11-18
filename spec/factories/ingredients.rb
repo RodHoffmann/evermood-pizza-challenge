@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :ingredient do
-    name { "MyString" }
-    price { "9.99" }
+    sequence(:name) { |n| "Ingredient#{n}" }
+    price { Faker::Commerce.price(range: 0.5..3.0) }
   end
 end

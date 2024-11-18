@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :order_item_ingredient_modification do
-    ingredient_presence_status { false }
-    ingredient { nil }
-    order_item { nil }
+    association :ingredient
+    association :order_item
+    modification_type { %w[add remove].sample }
   end
 end
