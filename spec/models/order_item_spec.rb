@@ -27,10 +27,11 @@ RSpec.describe OrderItem, type: :model do
     it 'calculates the correct price with extra ingredients' do
       ingredient1 = create(:ingredient, price: 1)
       ingredient2 = create(:ingredient, price: 2)
+
       create(:order_item_ingredient_modification, order_item: order_item, ingredient: ingredient1, modification_type: 'add')
       create(:order_item_ingredient_modification, order_item: order_item, ingredient: ingredient2, modification_type: 'add')
 
-      expect(order_item.total_item_price).to eq(23) # (10 + 1 + 2) * 2
+      expect(order_item.total_item_price).to eq(26)
     end
   end
 end

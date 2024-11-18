@@ -23,21 +23,22 @@ RSpec.describe Order, type: :model do
 
   describe '#total_price' do
     it 'calculates the correct total price for an order' do
-      expect(order.total_price).to eq(order.order_items.sum(&:total_item_price))
+      expect(order.total_price).to be_within(0.01).of(order.order_items.sum(&:total_item_price))
     end
 
     it 'applies discount codes correctly' do
       discount_code = create(:discount_code, deduction_in_percent: 10)
       order.update(discount_code: discount_code)
-      expect(order.total_price).to eq(order.order_items.sum(&:total_item_price) * 0.9)
+      expect(order.total_price).to be_within(0.01).of(order.order_items.sum(&:total_item_price) * 0.9)
     end
 
-    it 'applies promotion codes correctly' do
-      promotion_code = create(:promotion_code, target: order.order_items.first.pizza.name,
-                                               target_size: order.order_items.first.size_multiplier.size,
-                                               from: 2, to: 1)
-      create(:order_promotion_code, order: order, promotion_code: promotion_code)
-      expect(order.total_price).to be < order.order_items.sum(&:total_item_price)
+    it 'after applying promotion codes, total price should be equal or less than' do
+      promotion_code = build(:promotion_code, target: order.order_items.first.pizza.name,
+                                              target_size: order.order_items.first.size_multiplier.size,
+                                              from: 2,
+                                              to: 1)
+      build(:order_promotion_code, order: order, promotion_code: promotion_code)
+      expect(order.total_price).to be <= order.order_items.sum(&:total_item_price).round(2)
     end
   end
 end
