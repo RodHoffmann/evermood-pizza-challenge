@@ -313,6 +313,8 @@ DEPENDENCIES
   error_highlight (>= 0.4.0)
   factory_bot_rails
   faker
+  debug
+  error_highlight (>= 0.4.0)
   importmap-rails
   jbuilder
   pg (~> 1.1)
