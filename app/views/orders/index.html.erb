@@ -1,6 +1,6 @@
 <h1>Orders</h1>
 <hr>
-<% @open_orders.each do |order| %>
+<% @open_orders_with_details.each do |order| %>
   <span id="order-<%= order.id %>">
     <span class="inline-section">
       <p>ID: <%= order.id %></p>

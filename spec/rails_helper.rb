@@ -40,7 +40,6 @@ RSpec.configure do |config|
   # FactoryBot methods allowed directly in tests
   config.include FactoryBot::Syntax::Methods
 
-  # database_cleaner for managing test database
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)

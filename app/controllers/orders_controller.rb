@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   def index
-    @open_orders = Order.open_orders
+    @open_orders_with_details = Order.open_orders_with_details
   end
 
   def update

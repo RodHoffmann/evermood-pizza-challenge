@@ -72,6 +72,7 @@ initial_orders.each do |initial_order|
     item[:remove]&.each { |remove_ingredient| OrderItemIngredientModification.create!(order_item: order_item, ingredient: Ingredient.find_by(name: remove_ingredient), modification_type: 'remove') }
   end
   promotion_codes&.each { |promotion_code| OrderPromotionCode.create!(promotion_code: promotion_code, order: new_order) }
+  new_order.save!
 end
 puts 'Orders created successfully'
 puts "\nAll initial data migrated into the Database\n"

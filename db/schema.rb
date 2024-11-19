@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_16_081430) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_19_090138) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_081430) do
     t.uuid "discount_code_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "total_price", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["discount_code_id"], name: "index_orders_on_discount_code_id"
   end
 
