@@ -16,15 +16,30 @@ class OrdersController < ApplicationController
 
   def respond_success(method_name)
     respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to orders_path, notice: "Order #{method_name}ed successfully" }
+      format.turbo_stream do
+        flash[:notice] = "Order #{method_name}d successfully"
+        render turbo_stream: [
+          turbo_stream_flash,
+          turbo_stream.remove("order-#{params[:id]}")
+        ]
+      end
+      format.html { redirect_to orders_path, notice: "Order #{method_name}d successfully" }
     end
   end
 
   def respond_failure(method_name)
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@order, partial: "orders/order", locals: { order: @order }) }
-      format.html { render :index, notice: "Order couldn't be #{method_name}ed", status: :unprocessable_entity }
+      format.turbo_stream do
+        flash[:alert] = "Order couldn't be #{method_name}d"
+        render turbo_stream: [turbo_stream_flash,
+                              turbo_stream.replace("order-#{params[:id]}",
+                                                   partial: 'orders/order_card', locals: { order: @order })]
+      end
+      format.html { render :index, notice: "Order couldn't be #{method_name}d", status: :unprocessable_entity }
     end
+  end
+
+  def turbo_stream_flash
+    turbo_stream.update('flash', partial: 'shared/flash')
   end
 end

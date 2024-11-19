@@ -123,7 +123,8 @@ def create_orders(orders_data)
 end
 
 # Main execution flow
-# destroy_all_data
+# Uncomment the following line to run clean the database before seeding
+destroy_all_data
 initial_data = parse_initial_data
 create_ingredients(initial_data)
 create_pizzas(initial_data)
