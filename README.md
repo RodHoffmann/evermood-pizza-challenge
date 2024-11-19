@@ -32,6 +32,10 @@ Database
 
     All tables use UUID keys and must be set manually for new tables or new associations.
 
+
+![DataBase Schema Pizza Ordering System](https://github.com/user-attachments/assets/c6501df3-38b4-4de6-877e-6d839b56d73e)
+
+
 Gems
 
     rails, sprockets-rails, pg, puma, importmap-rails, turbo-rails, stimulus-rails, jbuilder, tzinfo-data, bootsnap, debug,
