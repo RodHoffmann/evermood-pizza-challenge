@@ -15,6 +15,11 @@ class Order < ApplicationRecord
     open_orders_with_details_query
   end
 
+  def calculate_total_price
+    price_before_discount_and_promotions = order_items.sum(&:total_item_price)
+    price_before_discount = apply_promotion_codes(price_before_discount_and_promotions)
+    discount_code ? apply_discount_code(price_before_discount).round(2) : price_before_discount.round(2)
+  end
   private
 
   def set_total_price
@@ -37,12 +42,6 @@ class Order < ApplicationRecord
 
   def needs_price_update?
     order_items.any? || promotion_codes.any?
-  end
-
-  def calculate_total_price
-    price_before_discount_and_promotions = order_items.sum(&:total_item_price)
-    price_before_discount = apply_promotion_codes(price_before_discount_and_promotions)
-    discount_code ? apply_discount_code(price_before_discount).round(2) : price_before_discount.round(2)
   end
 
   def apply_discount_code(price_before_discount)
