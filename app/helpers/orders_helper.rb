@@ -15,10 +15,18 @@ module OrdersHelper
   end
 
   def display_pizza_modifications(order_item)
-    additions = order_item.order_item_ingredient_modifications.where(modification_type: 'add')
-    removals = order_item.order_item_ingredient_modifications.where(modification_type: 'remove')
-    additions = "<li>Add: #{additions&.map { |ingredient| ingredient.ingredient.name }.join(', ')}</li>" if additions.present?
-    removals = "<li>Remove: #{removals&.map { |ingredient| ingredient.ingredient.name }.join(', ')}</li>" if removals.present?
-    [additions, removals].compact.join("\n").html_safe
+    modifications = %i[add remove].map { |type| modification_list(order_item, type) }
+    modifications.compact.join("\n").html_safe
+  end
+
+  private
+
+  def modification_list(order_item, type)
+    modifications = order_item.order_item_ingredient_modifications.where(modification_type: type)
+    return if modifications.blank?
+
+    label = type == :add ? 'Add' : 'Remove'
+    ingredients = modifications.map { |mod| mod.ingredient.name }.join(', ')
+    "<li>#{label}: #{ingredients}</li>"
   end
 end
