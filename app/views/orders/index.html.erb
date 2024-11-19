@@ -1,0 +1,5 @@
+<h1>Orders</h1>
+<hr>
+<% @open_orders_with_details.each do |order| %>
+  <%= render 'order_card', order:order %>
+<% end %>

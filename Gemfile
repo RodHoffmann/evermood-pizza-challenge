@@ -52,6 +52,12 @@ group :development, :test do
   gem 'capybara'
 end
 
+group :test do
+  gem 'database_cleaner-active_record'
+  gem 'faker'
+  gem 'shoulda-matchers'
+end
+
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
@@ -67,3 +73,4 @@ end
 
 # Linter
 gem 'rubocop-rails', require: false
+gem 'rubocop-rspec', require: false
