@@ -26,3 +26,8 @@
  .inline-section form {
    margin-top: 12px;
  }
+
+ hr {
+  width: 50%;
+  margin-left: 0;
+ }
